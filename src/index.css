@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Rubik:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -96,6 +99,40 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-heebo;
+    direction: rtl;
   }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-rubik;
+  }
+}
+
+.item-card {
+  @apply relative overflow-hidden rounded-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-lg;
+}
+
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-lamasia-vibrantpurple to-lamasia-vibrantpink;
+}
+
+.wavy-border {
+  position: relative;
+}
+
+.wavy-border::before {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    currentColor 10px,
+    currentColor 20px
+  );
+  opacity: 0.3;
 }
