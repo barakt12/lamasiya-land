@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { 
   Select,
   SelectContent,
@@ -73,9 +72,59 @@ const ListingsFilter = ({
   setActiveView
 }: ListingsFilterProps) => {
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [isSticky, setIsSticky] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
+  const initialTopOffset = useRef<number | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!filterRef.current) return;
+      
+      if (initialTopOffset.current === null) {
+        initialTopOffset.current = filterRef.current.getBoundingClientRect().top + window.scrollY;
+      }
+      
+      const footerElement = document.querySelector('footer');
+      if (!footerElement) return;
+      
+      const footerTop = footerElement.getBoundingClientRect().top;
+      const filterHeight = filterRef.current.offsetHeight;
+      const scrollY = window.scrollY;
+      
+      if (scrollY > initialTopOffset.current) {
+        setIsSticky(true);
+        
+        if (footerTop - filterHeight - 40 < 0) {
+          filterRef.current.style.top = `${footerTop - filterHeight - 40}px`;
+          filterRef.current.style.position = 'fixed';
+        } else {
+          filterRef.current.style.top = '100px';
+          filterRef.current.style.position = 'fixed';
+        }
+      } else {
+        setIsSticky(false);
+        filterRef.current.style.position = 'static';
+        filterRef.current.style.top = 'auto';
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    
+    handleScroll();
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
-    <div className="space-y-6">
+    <div 
+      ref={filterRef} 
+      className={`space-y-6 ${isSticky ? 'transition-all duration-300 w-[calc(25%-1rem)]' : ''}`}
+      style={{ 
+        zIndex: 10,
+      }}
+    >
       <Card className="border-lamasia-purple shadow-sm">
         <CardHeader className="pb-2">
           <CardTitle className="text-xl font-medium">חיפוש</CardTitle>
