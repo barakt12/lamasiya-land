@@ -74,11 +74,12 @@ const ListingsFilter = ({
   const [searchTerm, setSearchTerm] = React.useState('');
   const [isSticky, setIsSticky] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
+  const filterParentRef = useRef<HTMLDivElement>(null);
   const initialTopOffset = useRef<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!filterRef.current) return;
+      if (!filterRef.current || !filterParentRef.current) return;
       
       if (initialTopOffset.current === null) {
         initialTopOffset.current = filterRef.current.getBoundingClientRect().top + window.scrollY;
@@ -87,40 +88,67 @@ const ListingsFilter = ({
       const footerElement = document.querySelector('footer');
       if (!footerElement) return;
       
+      const parentRect = filterParentRef.current.getBoundingClientRect();
       const footerTop = footerElement.getBoundingClientRect().top;
       const filterHeight = filterRef.current.offsetHeight;
       const scrollY = window.scrollY;
+      
+      const parentTop = parentRect.top + window.scrollY;
+      const parentBottom = parentRect.bottom;
       
       if (scrollY > initialTopOffset.current) {
         setIsSticky(true);
         
         if (footerTop - filterHeight - 40 < 0) {
-          filterRef.current.style.top = `${footerTop - filterHeight - 40}px`;
-          filterRef.current.style.position = 'fixed';
+          filterRef.current.style.position = 'absolute';
+          filterRef.current.style.top = `${parentBottom - filterHeight - footerTop + window.scrollY}px`;
         } else {
-          filterRef.current.style.top = '100px';
           filterRef.current.style.position = 'fixed';
+          filterRef.current.style.top = '100px';
+          filterRef.current.style.width = `${parentRect.width}px`;
         }
       } else {
         setIsSticky(false);
         filterRef.current.style.position = 'static';
         filterRef.current.style.top = 'auto';
+        filterRef.current.style.width = 'auto';
       }
     };
 
+    const createWrapper = () => {
+      if (!filterRef.current) return;
+      
+      const wrapper = document.createElement('div');
+      const parent = filterRef.current.parentElement;
+      
+      if (!parent) return;
+      
+      filterParentRef.current = wrapper;
+      
+      wrapper.style.height = `${filterRef.current.offsetHeight}px`;
+      wrapper.style.width = `${filterRef.current.offsetWidth}px`;
+      wrapper.style.position = 'relative';
+      
+      parent.replaceChild(wrapper, filterRef.current);
+      wrapper.appendChild(filterRef.current);
+    };
+    
+    createWrapper();
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
     
     handleScroll();
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, []);
 
   return (
     <div 
       ref={filterRef} 
-      className={`space-y-6 ${isSticky ? 'transition-all duration-300 w-[calc(25%-1rem)]' : ''}`}
+      className="space-y-6"
       style={{ 
         zIndex: 10,
       }}
