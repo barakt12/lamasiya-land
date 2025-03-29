@@ -19,14 +19,14 @@ const CallToAction = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button 
-              className="bg-white text-lamasia-vibrantpurple hover:bg-white/90 transition-colors text-lg py-6 px-8"
-              as={Link}
-              to="/listings"
-            >
-              מסירת חפץ
-              <ArrowLeft className="mr-2 h-5 w-5" />
-            </Button>
+            <Link to="/listings">
+              <Button 
+                className="bg-white text-lamasia-vibrantpurple hover:bg-white/90 transition-colors text-lg py-6 px-8"
+              >
+                מסירת חפץ
+                <ArrowLeft className="mr-2 h-5 w-5" />
+              </Button>
+            </Link>
             <Button 
               variant="outline" 
               className="border-2 border-white text-white hover:bg-white/10 transition-colors text-lg py-6 px-8"

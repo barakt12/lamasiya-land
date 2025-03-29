@@ -28,14 +28,14 @@ const Header = () => {
           >
             התחברות
           </Button>
-          <Button 
-            className="bg-gradient-to-r from-lamasia-vibrantpurple to-lamasia-vibrantpink text-white"
-            as={Link}
-            to="/listings"
-          >
-            <Heart className="h-4 w-4 mr-2" />
-            תרמו פריט
-          </Button>
+          <Link to="/listings">
+            <Button 
+              className="bg-gradient-to-r from-lamasia-vibrantpurple to-lamasia-vibrantpink text-white"
+            >
+              <Heart className="h-4 w-4 mr-2" />
+              תרמו פריט
+            </Button>
+          </Link>
         </div>
       </div>
     </header>
