@@ -109,7 +109,7 @@ const ListingsFilter = ({
         }
       } else {
         setIsSticky(false);
-        filterRef.current.style.position = 'static';
+        filterRef.current.style.position = 'fixed';
         filterRef.current.style.top = 'auto';
         filterRef.current.style.width = 'auto';
       }
@@ -150,6 +150,7 @@ const ListingsFilter = ({
       ref={filterRef} 
       className="space-y-6"
       style={{ 
+        position: 'fixed',
         zIndex: 10,
       }}
     >
