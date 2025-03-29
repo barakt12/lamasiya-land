@@ -61,12 +61,14 @@ const Listings = () => {
           </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-16">
-            <ListingsFilter 
-              filters={filters} 
-              setFilters={setFilters} 
-              activeView={activeView}
-              setActiveView={setActiveView}
-            />
+            <div className="lg:col-span-1">
+              <ListingsFilter 
+                filters={filters} 
+                setFilters={setFilters} 
+                activeView={activeView}
+                setActiveView={setActiveView}
+              />
+            </div>
             
             <div className="lg:col-span-3">
               <ListingsGrid 
